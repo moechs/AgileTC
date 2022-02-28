@@ -10,7 +10,7 @@ CREATE TABLE `case_backup` (
   `is_delete` int(11) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_caseId` (`case_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=677 DEFAULT CHARSET=utf8 COMMENT='测试备份';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='测试备份';
 
 CREATE TABLE `exec_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -36,7 +36,7 @@ CREATE TABLE `exec_record` (
   `owner` varchar(200) NOT NULL DEFAULT '' COMMENT '负责人',
   PRIMARY KEY (`id`),
   KEY `idx_caseId_isdelete` (`case_id`,`is_delete`)
-) ENGINE=InnoDB AUTO_INCREMENT=898 DEFAULT CHARSET=utf8 COMMENT='用例执行记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用例执行记录';
 
 CREATE TABLE `test_case` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -59,7 +59,7 @@ CREATE TABLE `test_case` (
   PRIMARY KEY (`id`),
   KEY `idx_productline_isdelete` (`product_line_id`,`is_delete`),
   KEY `idx_requirement_id` (`requirement_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2207 DEFAULT CHARSET=utf8 COMMENT='测试用例';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='测试用例';
 
 ## 请执行以下SQL，新建了一张文件夹表，同时给test_case增加文件夹字段，exec_record增加执行个数统计的兜底字段
 # 增加文件夹表
@@ -95,7 +95,7 @@ CREATE TABLE `user` (
   `gmt_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `gmt_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=677 DEFAULT CHARSET=utf8 COMMENT='用户信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户信息';
 
 alter table user add column authority_name varchar(63) default '' after salt;
 

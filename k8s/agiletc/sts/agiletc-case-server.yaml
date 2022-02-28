@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: agiletc-case-server
+spec:
+  selector:
+    matchLabels:
+      app: agiletc-case-server
+  serviceName: agiletc-case-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: agiletc-case-server
+    spec:
+      initContainers:
+      - image: moech/agiletc-case-server
+        imagePullPolicy: Always
+        name: init
+        command:
+        - /bin/sh
+        - -c
+        - mv /data/package/* /spring/
+        volumeMounts:
+        - mountPath: /spring
+          name: app-volume
+      containers:
+      - args:
+        - -Dfile.encoding=utf-8
+        - -Djava.security.egd=file:/dev/./urandom
+        - -Duser.timezone=Asia/Shanghai
+        - -Dcom.sun.management.jmxremote
+        - -Dcom.sun.management.jmxremote.authenticate=false
+        - -Dcom.sun.management.jmxremote.ssl=false
+        - -Dcom.sun.management.jmxremote.port=9999
+        - -Dspring.profiles.active=prod
+        - -Dhttps.ssl.enable=false
+        - -Dhttp.port=8080
+        - -jar
+        - /opt/spring/agiletc-case-server.jar
+        command:
+        - java
+        image: moech/base-jdk:1.8.0_202_skywalking_fonts
+        imagePullPolicy: IfNotPresent
+        name: base-jre
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: 1024Mi
+            cpu: 100m
+        volumeMounts:
+        - mountPath: /opt/spring
+          name: app-volume
+        - mountPath: /upload
+          name: data
+      nodeSelector:
+        NodeType: Application
+      restartPolicy: Always
+      volumes:
+      - emptyDir: {}
+        name: app-volume
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi

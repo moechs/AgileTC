@@ -169,6 +169,7 @@ export default class CaseMgt extends React.Component {
     const { iscore, caseId, itemid } = match.params;
     const user = getCookies('username');
     const { recordDetail, casedetail } = this.state;
+    const wsprotocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
     let readOnly = false;
     let progressShow = false;
     let addFactor = false;
@@ -387,7 +388,7 @@ export default class CaseMgt extends React.Component {
             }}
             baseUrl=""
             uploadUrl="/api/file/uploadAttachment"
-            wsUrl={`ws://${window.location.host}/api/case/${caseId}/${itemid}/${iscore}/${user}`}
+            wsUrl={`${wsprotocol}//${window.location.host}/api/case/${caseId}/${itemid}/${iscore}/${user}`}
             onSave={
               Number(iscore) !== 2
                 ? () => {

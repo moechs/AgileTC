@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  ALLOW_EMPTY_PASSWORD: "no"
+  MYSQL_DATABASE: "agiletc"
+  my_custom.cnf: |
+    [mysqld]
+    default-time-zone = '+08:00'
+    server-id = 10001
+    character-set-server = utf8mb4
+    collation-server = utf8mb4_unicode_ci
+    ### safety
+    max_connections = 20000
+    max_connect_errors = 1000000
+    max_allowed_packet = 32M
+    
+    ### log
+    binlog_format = ROW
+    log_bin = binlog
+    expire_logs_days = 7
+    slow_query_log = ON
+    slow_query_log_file = slow.log
+    long_query_time = 5
+
+
+    ### cache and limit
+    tmp_table_size = 128M
+    max_heap_table_size = 128M
+    join_buffer_size = 4M
+    query_cache_size = 0
+    query_cache_type = 0
+    wait_timeout = 600
+    thread_cache_size = 3072
+    open_files_limit    = 65535
+    table_definition_cache = 1024
+    table_open_cache_instances = 16
+    table_open_cache = 1024
+    interactive_timeout = 600
+    back_log = 1024
+
+    skip_name_resolve = 1
+    lower_case_table_names = 1
+    sort_buffer_size = 4M
+    read_buffer_size = 8M
+    read_rnd_buffer_size = 4M
+    lock_wait_timeout = 3600
+    explicit_defaults_for_timestamp = 1
+
+    sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+    
+    [mysqldump]
+    quick
+    max_allowed_packet = 32M

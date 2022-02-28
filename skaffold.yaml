@@ -1,0 +1,32 @@
+apiVersion: skaffold/v2beta25
+kind: Config
+build:
+  artifacts:
+  - image: moech/agiletc-case-server
+    kaniko:
+      buildArgs:
+        packagename: case-server/target/agiletc-case-server.jar
+      image: moech/kaniko-executor:latest
+      initImage: moech/busybox:latest
+      volumeMounts:
+      - mountPath: /kaniko/.docker/
+        name: docker-config
+  tagPolicy:
+    gitCommit:
+      variant: CommitSha
+  cluster:
+    namespace: default
+    volumes:
+    - configMap:
+        name: docker-config
+      name: docker-config
+deploy:
+  kubectl:
+    manifests:
+    - k8s/*.yaml
+profiles:
+- name: test
+  patches:
+  - op: replace
+    path: /build/artifacts/0/image
+    value: registry:5000/moech/agiletc-case-server
